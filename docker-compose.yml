@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eazybank_accounts
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  configserver:
+    build:
+      context: ./configserver
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: git
+      ENCRYPT_KEY: 45D81EC1EF61DF9AD8D3E5BB397F9
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/eazybytes/eazybytes-config.git
+      SPRING_CLOUD_CONFIG_SERVER_GIT_CLONE_ON_START: 'true'
+    ports:
+      - 8071:8071
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:8071/actuator/health || (echo 'HEALTHCHECK FAIL'; exit 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+  eurekaserver:
+    build:
+      context: ./eurekaserver
+      dockerfile: Dockerfile
+    depends_on:
+      configserver:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
+    ports:
+      - 8070:8070
+
+  accounts:
+    build:
+      context: ./accounts
+      dockerfile: Dockerfile
+    depends_on:
+      - configserver
+      - eurekaserver
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_accounts
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data: {}
