@@ -27,11 +27,12 @@ services:
     ports:
       - 8071:8071
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8071/actuator/health | grep UP || exit 1"]
+      test: ["CMD-SHELL", "curl --fail --silent http://localhost:8071/actuator/health | grep UP || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 30s
+
 
 
   eurekaserver:
@@ -44,8 +45,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
+      SERVER_PORT: 8761
+      SERVER_ADDRESS: 0.0.0.0
     ports:
-      - 8070:8070
+      - 8761:8761
 
   accounts:
     build:
@@ -59,10 +62,11 @@ services:
       SPRING_APPLICATION_NAME: accounts     
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_accounts
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_ADDRESS: 0.0.0.0	
     ports:
       - 8080:8080
 
