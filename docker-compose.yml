@@ -22,12 +22,12 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: git
       ENCRYPT_KEY: 45D81EC1EF61DF9AD8D3E5BB397F9
-      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/eazybytes/eazybytes-config.git
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/Achref-LOUSSAIEF/eazybytes-config.git
       SPRING_CLOUD_CONFIG_SERVER_GIT_CLONE_ON_START: 'true'
     ports:
       - 8071:8071
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:8071/actuator/health || (echo 'HEALTHCHECK FAIL'; exit 1)"]
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8071/actuator/health | grep UP || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -56,6 +56,7 @@ services:
       - eurekaserver
       - postgres
     environment:
+      SPRING_APPLICATION_NAME: accounts     
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/

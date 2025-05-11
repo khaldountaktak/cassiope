@@ -5,16 +5,23 @@ port="$2"
 shift 2
 
 timeout="${WAIT_FOR_IT_TIMEOUT:-30}"
-echo "⏳ Waiting for $host:$port to be available..."
+url="http://$host:$port/actuator/health"
 
-while ! nc -z "$host" "$port"; do
-  sleep 1
+echo "⏳ Waiting for $url to return top-level status UP..."
+
+while true; do
+  status=$(curl --silent --fail "$url" | grep -o '"status":"UP"' | head -n 1)
+
+  if [ "$status" = '"status":"UP"' ]; then
+    echo "✅ $url is healthy. Launching service..."
+    exec "$@"
+  fi
+
   timeout=$((timeout - 1))
   if [ "$timeout" -le 0 ]; then
-    echo "❌ Timeout waiting for $host:$port"
+    echo "❌ Timeout waiting for $url"
     exit 1
   fi
-done
 
-echo "✅ $host:$port is available. Launching service..."
-exec "$@"
+  sleep 1
+done

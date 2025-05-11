@@ -6,8 +6,8 @@ com/eazybytes/accounts/service/client/CardsFeignClient.class
 com/eazybytes/accounts/service/impl/AccountsServiceImpl.class
 com/eazybytes/accounts/dto/AccountsDto.class
 com/eazybytes/accounts/controller/CustomerController.class
-com/eazybytes/accounts/entity/Accounts.class
 com/eazybytes/accounts/exception/GlobalExceptionHandler.class
+com/eazybytes/accounts/entity/Accounts.class
 com/eazybytes/accounts/entity/BaseEntity.class
 com/eazybytes/accounts/dto/CustomerDto.class
 com/eazybytes/accounts/dto/CardsDto.class
@@ -19,11 +19,11 @@ com/eazybytes/accounts/mapper/AccountsMapper.class
 com/eazybytes/accounts/mapper/CustomerMapper.class
 com/eazybytes/accounts/repository/AccountsRepository.class
 com/eazybytes/accounts/AccountsApplication.class
-com/eazybytes/accounts/repository/CustomerRepository.class
 com/eazybytes/accounts/dto/CustomerDetailsDto.class
+com/eazybytes/accounts/repository/CustomerRepository.class
 com/eazybytes/accounts/audit/AuditAwareImpl.class
 com/eazybytes/accounts/dto/ErrorResponseDto.class
-com/eazybytes/accounts/service/IAccountsService.class
 com/eazybytes/accounts/dto/LoansDto.class
+com/eazybytes/accounts/service/IAccountsService.class
 com/eazybytes/accounts/entity/Customer.class
 com/eazybytes/accounts/exception/ResourceNotFoundException.class
