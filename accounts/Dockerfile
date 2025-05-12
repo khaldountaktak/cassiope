@@ -1,7 +1,6 @@
 FROM openjdk:21-jdk-slim
 WORKDIR /app
 
-# Install curl
 RUN apt-get update && apt-get install -y curl
 
 COPY target/app.jar app.jar

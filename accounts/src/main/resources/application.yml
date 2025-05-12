@@ -7,7 +7,7 @@ spring:
   profiles:
     active: prod
   config: 
-    import: optional:configserver:${CONFIGSERVER_URI:http://localhost:8071}
+    import: optional:configserver:${CONFIGSERVER_URI}
     fail-fast: true
     retry:
       initial-interval: 2000

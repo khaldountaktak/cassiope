@@ -7,14 +7,14 @@ spring:
   profiles:
     active: prod
   config: 
-    import: optional:configserver:${CONFIGSERVER_URI:http://localhost:8071}
+    import: optional:configserver:http://configserver:8071
     fail-fast: true
     retry:
       initial-interval: 2000
       max-attempts: 6
       multiplier: 1.5
   datasource:
-    url: jdbc:postgresql://localhost:5432/eazybank_cards
+    url: jdbc:postgresql://postgres:5432/eazybank_cards
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -44,7 +44,7 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      defaultZone: http://eurekaserver:8761/eureka/
 
 info:
   app:

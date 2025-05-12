@@ -1,2 +1,11 @@
 # Ignore build artifacts
 /target//target/
+# Ignore all Maven/Gradle build outputs
+target/
+*.jar
+
+# Ignore Docker build artifacts
+**/app.jar
+
+# Ignore IntelliJ / Eclipse / VS Code configs (optional)
+.vscode/

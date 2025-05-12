@@ -9,9 +9,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: eazybank_accounts
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   configserver:
     build:
@@ -58,14 +58,16 @@ services:
       - eurekaserver
       - postgres
     environment:
-      CONFIGSERVER_URI: http://configserver:8071/
       SPRING_APPLICATION_NAME: accounts
       SPRING_PROFILES_ACTIVE: prod
+      CONFIGSERVER_URI: http://configserver:8071
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_accounts
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 8080
     ports:
       - 8080:8080
 
@@ -78,14 +80,15 @@ services:
       - eurekaserver
       - postgres
     environment:
-      CONFIGSERVER_URI: http://configserver:8071/
       SPRING_APPLICATION_NAME: cards
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_cards
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 9000
     ports:
       - 9000:9000
 
@@ -98,14 +101,15 @@ services:
       - eurekaserver
       - postgres
     environment:
-      CONFIGSERVER_URI: http://configserver:8071/
       SPRING_APPLICATION_NAME: loans
       SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_loans
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 9001
     ports:
       - 9001:9001
 
