@@ -23,6 +23,7 @@ services:
       SPRING_PROFILES_ACTIVE: git
       ENCRYPT_KEY: 45D81EC1EF61DF9AD8D3E5BB397F9
       SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/Achref-LOUSSAIEF/eazybytes-config.git
+      SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL: main
       SPRING_CLOUD_CONFIG_SERVER_GIT_CLONE_ON_START: 'true'
     ports:
       - 8071:8071
@@ -32,8 +33,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
-
-
 
   eurekaserver:
     build:
@@ -59,16 +58,56 @@ services:
       - eurekaserver
       - postgres
     environment:
-      SPRING_APPLICATION_NAME: accounts     
+      CONFIGSERVER_URI: http://configserver:8071/
+      SPRING_APPLICATION_NAME: accounts
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_accounts
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-      SERVER_ADDRESS: 0.0.0.0	
+      SERVER_ADDRESS: 0.0.0.0
     ports:
       - 8080:8080
+
+  cards:
+    build:
+      context: ./cards
+      dockerfile: Dockerfile
+    depends_on:
+      - configserver
+      - eurekaserver
+      - postgres
+    environment:
+      CONFIGSERVER_URI: http://configserver:8071/
+      SPRING_APPLICATION_NAME: cards
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_cards
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_ADDRESS: 0.0.0.0
+    ports:
+      - 9000:9000
+
+  loans:
+    build:
+      context: ./loans
+      dockerfile: Dockerfile
+    depends_on:
+      - configserver
+      - eurekaserver
+      - postgres
+    environment:
+      CONFIGSERVER_URI: http://configserver:8071/
+      SPRING_APPLICATION_NAME: loans
+      SPRING_PROFILES_ACTIVE: prod
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_loans
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SERVER_ADDRESS: 0.0.0.0
+    ports:
+      - 9001:9001
 
 volumes:
   postgres_data: {}

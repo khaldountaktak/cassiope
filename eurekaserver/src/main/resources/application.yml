@@ -4,16 +4,14 @@ spring:
   config:
     import: "optional:configserver:http://configserver:8071/"
 
-# Don't define server.port here — it will be pulled from config server
-
 eureka:
   instance:
     preferIpAddress: true
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
-      defaultZone: http://eurekaserver:8070/eureka/
+      defaultZone: http://eurekaserver:8761/eureka/
 
 management:
   endpoints:

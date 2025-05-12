@@ -92,31 +92,20 @@
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.4.2</version>
-                <configuration>
-                    <to>
-                        <image>eazybytes/${project.artifactId}:s8</image>
-                    </to>
-                </configuration>
-            </plugin>
-        </plugins>
+    <plugins>
+        <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.4.1</version> <!-- same as your Spring Boot version -->
+        <executions>
+            <execution>
+            <goals>
+                <goal>repackage</goal>
+            </goals>
+            </execution>
+        </executions>
+        </plugin>
+    </plugins>
     </build>
 
 </project>

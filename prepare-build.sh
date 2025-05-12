@@ -2,7 +2,7 @@
 set -e
 
 # List of modules to build
-modules=("configserver" "eurekaserver" "accounts" )
+modules=("configserver" "eurekaserver" "accounts" "cards" "loans")
 
 echo "🔧 Building and preparing JARs for: ${modules[*]}"
 

@@ -1,25 +1,29 @@
 server:
-  port: 8090
+  port: 9001
+
 spring:
   application:
-    name: "loans"
+    name: loans
   profiles:
-    active: "prod"
+    active: prod
+  config: 
+    import: optional:configserver:${CONFIGSERVER_URI:http://localhost:8071}
+    fail-fast: true
+    retry:
+      initial-interval: 2000
+      max-attempts: 6
+      multiplier: 1.5
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-  h2:
-    console:
-      enabled: true
+    url: jdbc:postgresql://localhost:5432/eazybank_loans
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
-  config:
-    import: "optional:configserver:http://localhost:8071/"
 
 management:
   endpoints:
@@ -40,10 +44,13 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
 
 info:
   app:
     name: "loans"
     description: "Eazy Bank Loans Application"
     version: "1.0.0"
+
+build:
+  version: 1.0.0
