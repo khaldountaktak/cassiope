@@ -40,7 +40,7 @@ spec:
               value: postgres
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-          image: loans
+          image: achrefloussaief101/loans
           name: loans
           ports:
             - containerPort: 9001

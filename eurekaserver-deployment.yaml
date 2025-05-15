@@ -30,7 +30,7 @@ spec:
               value: optional:configserver:http://configserver:8071/
             - name: SPRING_PROFILES_ACTIVE
               value: default
-          image: eurekaserver
+          image: achrefloussaief101/eurekaserver
           name: eurekaserver
           ports:
             - containerPort: 8761

@@ -32,7 +32,7 @@ spec:
               value: https://github.com/Achref-LOUSSAIEF/eazybytes-config.git
             - name: SPRING_PROFILES_ACTIVE
               value: git
-          image: configserver
+          image: achrefloussaief101/configserver
           livenessProbe:
             exec:
               command:

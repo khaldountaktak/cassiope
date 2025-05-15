@@ -42,7 +42,7 @@ spec:
               value: postgres
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-          image: accounts
+          image: achrefloussaief101/accounts
           name: accounts
           ports:
             - containerPort: 8080

@@ -6,15 +6,15 @@ spec:
   template:
     spec:
       containers:
-      - name: prepare
-        image: your/custom-image:tag
-        command: ["/bin/sh", "-c", "/app/prepare-build.sh"]
-        volumeMounts:
-        - name: script-volume
-          mountPath: /app
+        - name: prepare
+          image: ubuntu:latest
+          command: ["/bin/bash", "-c", "chmod +x /app/prepare-build.sh && /app/prepare-build.sh"]
+          volumeMounts:
+            - name: script-volume
+              mountPath: /app
       restartPolicy: Never
       volumes:
-      - name: script-volume
-        configMap:
-          name: prepare-script
+        - name: script-volume
+          configMap:
+            name: prepare-script
   backoffLimit: 3

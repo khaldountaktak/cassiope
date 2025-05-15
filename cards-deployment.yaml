@@ -40,7 +40,7 @@ spec:
               value: postgres
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-          image: cards
+          image: achrefloussaief101/cards
           name: cards
           ports:
             - containerPort: 9000
