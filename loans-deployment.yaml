@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (ae2a39403)
+  labels:
+    io.kompose.service: loans
+  name: loans
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: loans
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (ae2a39403)
+      labels:
+        io.kompose.service: loans
+    spec:
+      containers:
+        - env:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eurekaserver:8761/eureka/
+            - name: SERVER_ADDRESS
+              value: 0.0.0.0
+            - name: SERVER_PORT
+              value: "9001"
+            - name: SPRING_APPLICATION_NAME
+              value: loans
+            - name: SPRING_CONFIG_IMPORT
+              value: optional:configserver:http://configserver:8071/
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: postgres
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/eazybank_loans
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+          image: loans
+          name: loans
+          ports:
+            - containerPort: 9001
+              protocol: TCP
+      restartPolicy: Always

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.36.0 (ae2a39403)
+  labels:
+    io.kompose.service: configserver
+  name: configserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: configserver
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.36.0 (ae2a39403)
+      labels:
+        io.kompose.service: configserver
+    spec:
+      containers:
+        - env:
+            - name: ENCRYPT_KEY
+              value: 45D81EC1EF61DF9AD8D3E5BB397F9
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_CLONE_ON_START
+              value: "true"
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT_LABEL
+              value: main
+            - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+              value: https://github.com/Achref-LOUSSAIEF/eazybytes-config.git
+            - name: SPRING_PROFILES_ACTIVE
+              value: git
+          image: configserver
+          livenessProbe:
+            exec:
+              command:
+                - curl --fail --silent http://localhost:8071/actuator/health | grep UP || exit 1
+            failureThreshold: 10
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: configserver
+          ports:
+            - containerPort: 8071
+              protocol: TCP
+      restartPolicy: Always

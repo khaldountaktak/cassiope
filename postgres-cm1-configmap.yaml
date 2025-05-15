@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  init.sql: |
+    CREATE DATABASE eazybank_accounts;
+    CREATE DATABASE eazybank_cards;
+    CREATE DATABASE eazybank_loans;
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: postgres
+  name: postgres-cm1
