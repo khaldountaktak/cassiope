@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
     io.kompose.service: postgres-data
-  name: postgres
+  name: postgres-data
 spec:
   accessModes:
     - ReadWriteOnce

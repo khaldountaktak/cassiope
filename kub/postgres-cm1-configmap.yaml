@@ -10,4 +10,4 @@ metadata:
     use-subpath: "true"
   labels:
     io.kompose.service: postgres
-  name: postgres
+  name: postgres-postgres-cm1
