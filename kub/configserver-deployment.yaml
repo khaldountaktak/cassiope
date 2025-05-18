@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configserver
+  template:
+    metadata:
+      labels:
+        app: configserver
+    spec:
+      containers:
+        - name: configserver
+          image: achrefloussaief101/configserver
+          ports:
+            - containerPort: 8071
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: native
+            - name: ENCRYPT_KEY
+              value: 45D81EC1EF61DF9AD8D3E5BB397F9
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config-repo
+      volumes:
+        - name: config-volume
+          configMap:
+            name: config-files

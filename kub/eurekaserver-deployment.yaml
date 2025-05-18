@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eurekaserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eurekaserver
+  template:
+    metadata:
+      labels:
+        app: eurekaserver
+    spec:
+      containers:
+        - name: eurekaserver
+          image: achrefloussaief101/eurekaserver
+          ports:
+            - containerPort: 8761
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: default
+            - name: SPRING_CONFIG_IMPORT
+              value: optional:configserver:http://configserver:8071/
+            - name: SERVER_PORT
+              value: "8761"
+            - name: SERVER_ADDRESS
+              value: 0.0.0.0
