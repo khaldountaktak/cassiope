@@ -14,7 +14,7 @@ spring:
       max-attempts: 6
       multiplier: 1.5
   datasource:
-    url: jdbc:postgresql://localhost:5432/eazybank_accounts
+    url: jdbc:postgresql://postgres:5432/eazybank_accounts
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -44,7 +44,7 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+      defaultZone: http://eurekaserver:8761/eureka/
 
 info:
   app:
