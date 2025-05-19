@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cards
+  labels:
+    app: cards
 spec:
   replicas: 1
   selector:
@@ -17,6 +19,7 @@ spec:
           image: achrefloussaief101/cards
           ports:
             - containerPort: 9000
+              name: http
           env:
             - name: SPRING_APPLICATION_NAME
               value: cards

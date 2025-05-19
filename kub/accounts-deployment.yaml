@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: accounts
+  labels:
+    app: accounts
 spec:
   replicas: 1
   selector:
@@ -36,3 +38,4 @@ spec:
               value: 0.0.0.0
             - name: SERVER_PORT
               value: "8080"
+      restartPolicy: Always

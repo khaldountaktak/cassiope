@@ -34,4 +34,4 @@ spec:
             claimName: postgres-data
         - name: init-script
           configMap:
-            name: postgres-postgres-cm1
+            name: postgres-initdb

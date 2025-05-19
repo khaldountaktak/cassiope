@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loans
+  labels:
+    app: loans
 spec:
   replicas: 1
   selector:
@@ -17,6 +19,7 @@ spec:
           image: achrefloussaief101/loans
           ports:
             - containerPort: 9001
+              name: http
           env:
             - name: SPRING_APPLICATION_NAME
               value: loans

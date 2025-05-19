@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: eurekaserver
+  labels:
+    app: eurekaserver
 spec:
   replicas: 1
   selector:
@@ -17,6 +19,7 @@ spec:
           image: achrefloussaief101/eurekaserver
           ports:
             - containerPort: 8761
+              name: http
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: default

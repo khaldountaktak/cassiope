@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-native
+data:
+  accounts-prod.yml: |
+    build:
+      version: "1.0"
+
+    accounts:
+      message: "Hey, welcome to EazyBank accounts related webhook APIs"
+      contactDetails:
+        name: "Reine Aishwarya - Product Owner"
+        email: "{cipher}f83ac5a34ba5f4657ae8e863c063c1b69efb4d23d0c431eb134f8d1b3ed0823dee0a4b627d091455b4c6600353a3682c"
+      onCallSupport:
+        - (453) 392-4829
+        - (236) 203-0384
+  accounts-qa.yml: |-
+    build:
+      version: "2.0"
+
+    accounts:
+      message: "Welcome to EazyBank accounts related QA APIs "
+      contactDetails:
+        name: "Smitha Ray - QA Lead"
+        email: "smitha@eazybank.com"
+      onCallSupport:
+        - (666) 265-3765
+        - (666) 734-8371
+  accounts.yml: |
+    build:
+      version: "3.0"
+
+    accounts:
+      message: "Welcome to EazyBank accounts related docker APIs "
+      contactDetails:
+        name: "John Doe - Developer"
+        email: "john@eazybank.com"
+      onCallSupport:
+        - (555) 555-1234
+        - (555) 523-1345
+  application.yml: |
+    server:
+      port: 8080
+
+    spring:
+      application:
+        name: configserver
+      cloud:
+        config:
+          fail-fast: true
+          retry:
+            maxAttempts: 6
+            initialInterval: 2000
+            multiplier: 1.5
+
+    eureka:
+      client:
+        register-with-eureka: true
+        fetch-registry: true
+        service-url:
+          defaultZone: http://eurekaserver:8761/eureka/
+
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+  cards-prod.yml: |
+    build:
+      version: "1.0"
+
+    cards:
+      message: "Hey, welcome to EazyBank cards related prod APIs"
+      contactDetails:
+        name: "Sandra Harald - Product Owner"
+        email: "sandra@eazybank.com"
+      onCallSupport:
+        - (617) 432-2356
+        - (936) 564-8721
+  cards-qa.yml: |-
+    build:
+      version: "2.0"
+
+    cards:
+      message: "Welcome to EazyBank cards related QA APIs "
+      contactDetails:
+        name: "Cherryl Pankaj - QA Lead"
+        email: "cherryl@eazybank.com"
+      onCallSupport:
+        - (310) 875-4367
+        - (201) 236-1267
+  cards.yml: |-
+    build:
+      version: "3.0"
+
+    cards:
+      message: "Welcome to EazyBank cards related local APIs "
+      contactDetails:
+        name: "Dragos Lech - Developer"
+        email: "dragos@eazybank.com"
+      onCallSupport:
+        - (412) 419-3491
+        - (915) 382-1932
+  eurekaserver.yml: "server:\n  port: 8070\n\neureka:\n  instance:\n    hostname:
+    localhost\n  client:\n    fetchRegistry: false\n    registerWithEureka: false\n
+    \   serviceUrl:\n      defaultZone: http://eurekaserver:8761/eureka/\n    \n"
+  gatewayserver.yml: |
+    server:
+      port: 8072
+
+    eureka:
+      instance:
+        preferIpAddress: true
+      client:
+        registerWithEureka: true
+        fetchRegistry: true
+        serviceUrl:
+          defaultZone: http://eurekaserver:8761/eureka/
+  loans-prod.yml: |
+    build:
+      version: "1.0"
+
+    loans:
+      message: "Hey, welcome to EazyBank loans related prod APIs "
+      contactDetails:
+        name: "Pelias Sudhir - Product Owner"
+        email: "pelias@eazybank.com"
+      onCallSupport:
+        - (723) 656-8709
+        - (156) 342-0956
+  loans-qa.yml: |-
+    build:
+      version: "2.0"
+
+    loans:
+      message: "Welcome to EazyBank loans related QA APIs "
+      contactDetails:
+        name: "Cyrano Marita - QA Lead"
+        email: "cyrano@eazybank.com"
+      onCallSupport:
+        - (785) 545-6565
+        - (853) 546-3467
+  loans.yml: |-
+    build:
+      version: "3.0"
+
+    loans:
+      message: "Welcome to EazyBank loans related local APIs "
+      contactDetails:
+        name: "Amaal Grega - Developer"
+        email: "amaal@eazybank.com"
+      onCallSupport:
+        - (452) 456-2176
+        - (546) 764-8934
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: config-files
