@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config-native
+  name: config-files
 data:
   accounts-prod.yml: |
     build:
@@ -156,7 +156,3 @@ data:
       onCallSupport:
         - (452) 456-2176
         - (546) 764-8934
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: config-files

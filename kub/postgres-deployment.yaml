@@ -35,3 +35,4 @@ spec:
         - name: init-script
           configMap:
             name: postgres-initdb
+      restartPolicy: Always
