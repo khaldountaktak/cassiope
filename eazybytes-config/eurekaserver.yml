@@ -9,4 +9,3 @@ eureka:
     registerWithEureka: false
     serviceUrl:
       defaultZone: http://eurekaserver:8761/eureka/
-    

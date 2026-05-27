@@ -1,25 +1,37 @@
 services:
   postgres:
-    image: postgres:15
+    image: postgres:15.7
     container_name: postgres
-    ports:
-      - "5432:5432"
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:z
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 3s
       retries: 10
+    networks:
+      - backend
+
+  zipkin:
+    image: openzipkin/zipkin:3.3
+    container_name: zipkin
+    restart: unless-stopped
+    ports:
+      - 9411:9411
+    networks:
+      - backend
 
   configserver:
     build:
       context: ./configserver
       dockerfile: Dockerfile
+    container_name: configserver
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -27,7 +39,7 @@ services:
       SPRING_PROFILES_ACTIVE: native
       ENCRYPT_KEY: ${ENCRYPT_KEY}
     volumes:
-      - ./eazybytes-config:/config-repo
+      - ./eazybytes-config:/config-repo:z
     ports:
       - 8071:8071
     healthcheck:
@@ -36,11 +48,15 @@ services:
       timeout: 5s
       retries: 10
       start_period: 30s
+    networks:
+      - backend
 
   eurekaserver:
     build:
       context: ./eurekaserver
       dockerfile: Dockerfile
+    container_name: eurekaserver
+    restart: unless-stopped
     depends_on:
       configserver:
         condition: service_healthy
@@ -51,16 +67,26 @@ services:
       SERVER_ADDRESS: 0.0.0.0
     ports:
       - 8761:8761
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://localhost:8761/actuator/health | grep UP || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - backend
 
   accounts:
     build:
       context: ./accounts
       dockerfile: Dockerfile
+    container_name: accounts
+    restart: unless-stopped
     depends_on:
       configserver:
         condition: service_healthy
       eurekaserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
     environment:
@@ -71,20 +97,23 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_accounts
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
       SERVER_ADDRESS: 0.0.0.0
       SERVER_PORT: 8080
-    ports:
-      - 8080:8080
+    networks:
+      - backend
 
   cards:
     build:
       context: ./cards
       dockerfile: Dockerfile
+    container_name: cards
+    restart: unless-stopped
     depends_on:
       configserver:
         condition: service_healthy
       eurekaserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
     environment:
@@ -95,20 +124,23 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_cards
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
       SERVER_ADDRESS: 0.0.0.0
       SERVER_PORT: 9000
-    ports:
-      - 9000:9000
+    networks:
+      - backend
 
   loans:
     build:
       context: ./loans
       dockerfile: Dockerfile
+    container_name: loans
+    restart: unless-stopped
     depends_on:
       configserver:
         condition: service_healthy
       eurekaserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
     environment:
@@ -119,10 +151,30 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/eazybank_loans
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
       SERVER_ADDRESS: 0.0.0.0
       SERVER_PORT: 9001
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx
+    restart: unless-stopped
     ports:
-      - 9001:9001
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro,z
+    depends_on:
+      - accounts
+      - cards
+      - loans
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
 
 volumes:
   postgres_data: {}
