@@ -1,11 +1,10 @@
-FROM openjdk:21-jdk-slim
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-RUN apt-get update && apt-get install -y curl
-
-COPY target/app.jar app.jar
-COPY wait-for-it.sh wait-for-it.sh
-RUN chmod +x wait-for-it.sh
-
-EXPOSE 8080
-ENTRYPOINT ["./wait-for-it.sh", "configserver", "8071", "--", "java", "-jar", "app.jar"]
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

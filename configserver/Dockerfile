@@ -1,10 +1,10 @@
-FROM openjdk:21-jdk-slim
-
-# Install curl for Docker healthcheck
-RUN apt-get update && apt-get install -y curl && apt-get clean
-
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY target/app.jar app.jar
-EXPOSE 8071
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
