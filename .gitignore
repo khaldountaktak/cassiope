@@ -6,4 +6,6 @@ target/
 # IDE configs
 .vscode/
 .idea/
-*.iml.env
+.env
+*.env
+.env.*
