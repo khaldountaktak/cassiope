@@ -1,11 +1,9 @@
 build:
-  version: "3.0"
-
+  version: "1.0"
 cards:
-  message: "Welcome to EazyBank cards related local APIs "
+  message: "Welcome to Cassiope cards API"
   contactDetails:
-    name: "Dragos Lech - Developer"
-    email: "dragos@eazybank.com"
+    name: "Your Name - Developer"
+    email: "your@email.com"
   onCallSupport:
-    - (412) 419-3491
-    - (915) 382-1932
+    - "(000) 000-0000"

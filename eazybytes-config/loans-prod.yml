@@ -1,11 +1,9 @@
 build:
   version: "1.0"
-
 loans:
-  message: "Hey, welcome to EazyBank loans related prod APIs "
+  message: "Welcome to Cassiope loans API"
   contactDetails:
-    name: "Pelias Sudhir - Product Owner"
-    email: "pelias@eazybank.com"
+    name: "Your Name - Product Owner"
+    email: "your@email.com"
   onCallSupport:
-    - (723) 656-8709
-    - (156) 342-0956
+    - "(000) 000-0000"

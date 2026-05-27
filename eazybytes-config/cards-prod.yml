@@ -1,11 +1,9 @@
 build:
   version: "1.0"
-
 cards:
-  message: "Hey, welcome to EazyBank cards related prod APIs"
+  message: "Welcome to Cassiope cards API"
   contactDetails:
-    name: "Sandra Harald - Product Owner"
-    email: "sandra@eazybank.com"
+    name: "Your Name - Product Owner"
+    email: "your@email.com"
   onCallSupport:
-    - (617) 432-2356
-    - (936) 564-8721
+    - "(000) 000-0000"
